@@ -59,13 +59,12 @@ fn part_2() {
     let mut score = 0;
     let mut i = 1;
     while i < map.len() {
-        let result = map[i-1]& map[i]&map[i+1];
-        for i in 1..53   {
-            if result >> i & 1 == 1
-            {
-                score += i;
-                break;
-            }
+        let result = map[i - 1] & map[i] & map[i + 1];
+            println!("{} ", result);
+        if result != 0 {
+
+            //score += log_result as i32;
+            break;
         }
         i += 3;
     }

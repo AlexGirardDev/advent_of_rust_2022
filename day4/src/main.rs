@@ -2,13 +2,13 @@ const INPUT: &str = include_str!("./input.txt");
 const TEST: &str = include_str!("./test.txt");
 
 fn main() {
-    //part_1();
-        part_2();
+    part_1();
+        //part_2();
 }
 
 fn part_1() {
     let mut count = 0;
-    for (i, line) in INPUT.lines().enumerate() {
+    for (i, line) in TEST.lines().enumerate() {
         //36-92,35-78
         let split: Vec<&str> = line.split(",").collect();
         if split.len() != 2 {
@@ -40,6 +40,7 @@ fn part_1() {
             num_2_mask |= 1 << i;
         }
         let result = num_1_mask & num_2_mask;
+            println!( "{} {} {}",line, num_1_mask, num_2_mask);
 
         if result == num_1_mask || result == num_2_mask {
             //println!( "YES {} {}", i, line);
