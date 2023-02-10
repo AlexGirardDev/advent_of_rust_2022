@@ -11,4 +11,3 @@ fn part_1() {
 
 fn part_2() {
 }
-

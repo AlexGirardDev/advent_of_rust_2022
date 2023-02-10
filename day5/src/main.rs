@@ -9,6 +9,8 @@ fn main() {
 fn part_1() {
     let lines: Vec<&str> = INPUT.split("\n").collect();
     let stack_input_index = lines.iter().position(|&r| r == "").unwrap();
+
+
     let stack_input = &lines[..stack_input_index];
     let move_input = &lines[stack_input_index + 1..];
     let mut stack_list: [Vec<char>; 3] = Default::default();
