@@ -1,5 +1,5 @@
-use std::borrow::Borrow;
 use colored::Colorize;
+use std::borrow::Borrow;
 use std::cmp::Ordering;
 use std::collections::HashSet;
 
@@ -13,17 +13,15 @@ fn main() {
 fn part_2() {
     const RADIX: u32 = 10;
 
-    let mut map: Vec<Vec<u8>> = INPUT
+    let map: Vec<Vec<u8>> = INPUT
         .lines()
         .map(|x| {
             x.chars()
                 .map(|c| {
-                    (
-                        match c.to_digit(RADIX) {
-                            None => 0,
-                            Some(x) => x,
-                        } as u8
-                    )
+                    (match c.to_digit(RADIX) {
+                        None => 0,
+                        Some(x) => x,
+                    } as u8)
                 })
                 .collect()
         })
@@ -32,84 +30,40 @@ fn part_2() {
     let max_x = map.len();
     let max_y = map.first().unwrap().len();
 
-
     let mut max_score = 0;
+    let mods: Vec<(i32, i32)> = vec![(1, 0), (0, 1), (-1, 0), (0, -1)];
     for x in 1..max_x {
         for y in 1..max_y {
             let map_item = map[x][y];
-            println!("{x},{y} !!!");
-            print_grid_3(&map, (x,y));
             let mut score_vec: Vec<i32> = Vec::new();
-            {
+            for inc in &mods {
                 let mut temp_score = 0;
-                'inner: for x2 in x+1..max_x {
-                    println!("{x2},{y} >");
-                    let height = map[x2][y];
+                let mut x2 = x as i32;
+                let mut y2 = y as i32;
+                loop {
+                    x2 += inc.0;
+                    y2 += inc.1;
+                    if x2 < 0 || y2 < 0 || x2 >= max_x as i32 || y2 >= max_y as i32 {
+                        break;
+                    }
+                    let height = map[x2 as usize][y2 as usize];
                     temp_score += 1;
                     if height >= map_item {
-                        break 'inner;
-                    }
-                }
-
-                score_vec.push(temp_score);
-            }
-            {
-                let mut temp_score = 0;
-                'inner: for x2 in (0..x).rev() {
-                    println!("{x2},{y} <");
-                    let height = map[x2][y];
-
-                    temp_score += 1;
-                    if height >= map_item {
-                        break 'inner;
-                    }
-
-                }
-                score_vec.push(temp_score);
-            }
-            {
-                let mut temp_score = 0;
-                'inner: for y2 in y..max_y {
-                    println!("{x},{y2} v");
-                    let height = map[x][y2];
-                    temp_score += 1;
-                    if height >= map_item {
-                        break 'inner;
-                    }
-
-                    // if height >= tallest_tree {
-                    //     temp_score += 1;
-                    //     tallest_tree = height;
-                    // }
-                }
-                score_vec.push(temp_score);
-            }
-            {
-                let mut temp_score = 0;
-                'inner: for y2 in (0..y).rev() {
-                    println!("{x},{y2} ^");
-                    let height = map[x][y2];
-
-                    temp_score += 1;
-                    if height > map_item {
-                        println!("oof {x},{y2} - {map_item} - {height}");
-                        break 'inner;
+                        break;
                     }
                 }
                 score_vec.push(temp_score);
             }
             let mut new_score = *score_vec.first().unwrap();
-            for s in score_vec.iter().skip(1)
-            {
-                    new_score = new_score * s;
+            for s in score_vec.iter().skip(1) {
+                new_score = new_score * s;
             }
             if new_score > max_score {
                 max_score = new_score;
             }
 
-            if new_score>0{
-                println!("{x},{y} - {}- {new_score} {:?}",map_item, score_vec);
-
+            if new_score > 0 {
+                println!("{x},{y} - {}- {new_score} {:?}", map_item, score_vec);
             }
         }
     }
@@ -244,8 +198,8 @@ fn print_grid_2(map: &Vec<Vec<u8>>, current_tree: (usize, usize)) {
 }
 
 fn print_grid_3(map: &Vec<Vec<u8>>, current_tree: (usize, usize)) {
-    for (x, line) in map.iter().skip(current_tree.0-2).take(5).enumerate() {
-        for (y, s) in line.iter().skip(current_tree.1-2).take(5).enumerate() {
+    for (x, line) in map.iter().skip(current_tree.0 - 2).take(5).enumerate() {
+        for (y, s) in line.iter().skip(current_tree.1 - 2).take(5).enumerate() {
             if current_tree == (x, y) {
                 print!("{}", s.to_string().bright_yellow())
             } else {

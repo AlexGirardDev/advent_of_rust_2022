@@ -66,6 +66,7 @@ fn part_1() {
                         let size = size.1 + if dir_hashmap.contains_key(dir.as_str()) { dir_hashmap[dir.as_str()] } else { 0 };
                         dir_hashmap.insert(dir, size);
                     }
+
                 }
             }
         }
